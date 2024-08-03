@@ -1,3 +1,7 @@
+// Copyright (c) 2024 Dainis Berzins, All rights reserved.
+// Use of this source code is governed by a MIT-style license that can be
+// found in the LICENSE file.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <float.h>
@@ -10,10 +14,10 @@
 
 #include "lookuptables.h"
 
-// #define WINDOW_WIDTH 			1920
-// #define WINDOW_HEIGHT 			1080
-#define WINDOW_WIDTH 			800
-#define WINDOW_HEIGHT 			800
+// #define WINDOW_WIDTH             1920
+// #define WINDOW_HEIGHT             1080
+#define WINDOW_WIDTH             800
+#define WINDOW_HEIGHT             800
 
 #define GRID_SIZE   16
 #define CELL_SIZE   1.0f
@@ -42,10 +46,10 @@ static inline float max(float a, float b) {
 }
 
 static inline float interpolate_values(float v0, float v1, float isovalue) {
-	float a = min(v0, v1);
-	float b = max(v0, v1);
+    float a = min(v0, v1);
+    float b = max(v0, v1);
 
-	float result = (isovalue - a) / (b - a);
+    float result = (isovalue - a) / (b - a);
     return result;
 }
 
@@ -112,11 +116,11 @@ static Mesh marching_cubes(float *field, int size, float isovalue) {
                 Vector3 p[8];
                 float val[8];
 
-				Vector3 cell_pos = {
-					.x = (float)x,
-					.y = (float)y,
-					.z = (float)z
-				};
+                Vector3 cell_pos = {
+                    .x = (float)x,
+                    .y = (float)y,
+                    .z = (float)z
+                };
 
                 for (int i = 0; i < 8; i++) {
                     int ix = cube_cords[i][0];
@@ -134,39 +138,39 @@ static Mesh marching_cubes(float *field, int size, float isovalue) {
                 if (edge_table[cube_index] == 0)
                     continue;
 
-				if (edge_table[cube_index] & 1)
-					vertex_list[0] = interpolate_vertex(p[0],p[1],val[0],val[1], isovalue);
-				if (edge_table[cube_index] & 2)
-					vertex_list[1] = interpolate_vertex(p[1],p[2],val[1],val[2], isovalue);
-				if (edge_table[cube_index] & 4)
-					vertex_list[2] = interpolate_vertex(p[2],p[3],val[2],val[3], isovalue);
-				if (edge_table[cube_index] & 8)
-					vertex_list[3] = interpolate_vertex(p[3],p[0],val[3],val[0], isovalue);
-				if (edge_table[cube_index] & 16)
-					vertex_list[4] = interpolate_vertex(p[4],p[5],val[4],val[5], isovalue);
-				if (edge_table[cube_index] & 32)
-					vertex_list[5] = interpolate_vertex(p[5],p[6],val[5],val[6], isovalue);
-				if (edge_table[cube_index] & 64)
-					vertex_list[6] = interpolate_vertex(p[6],p[7],val[6],val[7], isovalue);
-				if (edge_table[cube_index] & 128)
-					vertex_list[7] = interpolate_vertex(p[7],p[4],val[7],val[4], isovalue);
-				if (edge_table[cube_index] & 256)
-					vertex_list[8] = interpolate_vertex(p[0],p[4],val[0],val[4], isovalue);
-				if (edge_table[cube_index] & 512)
-					vertex_list[9] = interpolate_vertex(p[1],p[5],val[1],val[5], isovalue);
-				if (edge_table[cube_index] & 1024)
-					vertex_list[10] = interpolate_vertex(p[2],p[6],val[2],val[6], isovalue);
-				if (edge_table[cube_index] & 2048)
-					vertex_list[11] = interpolate_vertex(p[3],p[7],val[3],val[7], isovalue);
+                if (edge_table[cube_index] & 1)
+                    vertex_list[0] = interpolate_vertex(p[0],p[1],val[0],val[1], isovalue);
+                if (edge_table[cube_index] & 2)
+                    vertex_list[1] = interpolate_vertex(p[1],p[2],val[1],val[2], isovalue);
+                if (edge_table[cube_index] & 4)
+                    vertex_list[2] = interpolate_vertex(p[2],p[3],val[2],val[3], isovalue);
+                if (edge_table[cube_index] & 8)
+                    vertex_list[3] = interpolate_vertex(p[3],p[0],val[3],val[0], isovalue);
+                if (edge_table[cube_index] & 16)
+                    vertex_list[4] = interpolate_vertex(p[4],p[5],val[4],val[5], isovalue);
+                if (edge_table[cube_index] & 32)
+                    vertex_list[5] = interpolate_vertex(p[5],p[6],val[5],val[6], isovalue);
+                if (edge_table[cube_index] & 64)
+                    vertex_list[6] = interpolate_vertex(p[6],p[7],val[6],val[7], isovalue);
+                if (edge_table[cube_index] & 128)
+                    vertex_list[7] = interpolate_vertex(p[7],p[4],val[7],val[4], isovalue);
+                if (edge_table[cube_index] & 256)
+                    vertex_list[8] = interpolate_vertex(p[0],p[4],val[0],val[4], isovalue);
+                if (edge_table[cube_index] & 512)
+                    vertex_list[9] = interpolate_vertex(p[1],p[5],val[1],val[5], isovalue);
+                if (edge_table[cube_index] & 1024)
+                    vertex_list[10] = interpolate_vertex(p[2],p[6],val[2],val[6], isovalue);
+                if (edge_table[cube_index] & 2048)
+                    vertex_list[11] = interpolate_vertex(p[3],p[7],val[3],val[7], isovalue);
 
                 for (int i = 0; tri_table[cube_index][i] != -1; i += 3) {
-					Vector3 p1 = Vector3Add(vertex_list[tri_table[cube_index][i]] , cell_pos);
-					Vector3 p2 = Vector3Add(vertex_list[tri_table[cube_index][i + 1]], cell_pos);
-					Vector3 p3 = Vector3Add(vertex_list[tri_table[cube_index][i + 2]], cell_pos);
+                    Vector3 p1 = Vector3Add(vertex_list[tri_table[cube_index][i]] , cell_pos);
+                    Vector3 p2 = Vector3Add(vertex_list[tri_table[cube_index][i + 1]], cell_pos);
+                    Vector3 p3 = Vector3Add(vertex_list[tri_table[cube_index][i + 2]], cell_pos);
 
-					vertices[vertex_count++] = (Vertex){p1, (Vector3){1.0f, 0.0f, 0.0f}};
-					vertices[vertex_count++] = (Vertex){p2, (Vector3){1.0f, 0.0f, 0.0f}};
-					vertices[vertex_count++] = (Vertex){p3, (Vector3){1.0f, 0.0f, 0.0f}};
+                    vertices[vertex_count++] = (Vertex){p1, (Vector3){1.0f, 0.0f, 0.0f}};
+                    vertices[vertex_count++] = (Vertex){p2, (Vector3){1.0f, 0.0f, 0.0f}};
+                    vertices[vertex_count++] = (Vertex){p3, (Vector3){1.0f, 0.0f, 0.0f}};
                 }
             }
         }
@@ -246,10 +250,10 @@ void update_camera_custom(Camera *camera)
 }
 
 int main(int argc, char** argv) {
-	srand((unsigned int)time(0));
+    srand((unsigned int)time(0));
 
-	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "m-cubes");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "m-cubes");
 
 
 
@@ -262,7 +266,7 @@ int main(int argc, char** argv) {
     // generate_cube_scalar_field(scalar_field, GRID_SIZE);
 
     Mesh mesh = marching_cubes(scalar_field, GRID_SIZE, isovalue);
-	// Upload mesh data from CPU (RAM) to GPU (VRAM) memory
+    // Upload mesh data from CPU (RAM) to GPU (VRAM) memory
     UploadMesh(&mesh, true);
     Model model = LoadModelFromMesh(mesh);
 
@@ -277,13 +281,13 @@ int main(int argc, char** argv) {
         .projection = CAMERA_PERSPECTIVE
     };
 
-	Vector3 cube_position = { 0.0f, 0.0f, 0.0f };
+    Vector3 cube_position = { 0.0f, 0.0f, 0.0f };
 
-	while (!WindowShouldClose()) {
+    while (!WindowShouldClose()) {
         update_camera_custom(&camera);
 
         BeginDrawing();
-		ClearBackground(GetColor(0x181818AA));
+        ClearBackground(GetColor(0x181818AA));
             BeginMode3D(camera);
                 // DrawCubeWires(cube_position, 2.0f, 2.0f, 2.0f, RED);
 
@@ -324,7 +328,7 @@ int main(int argc, char** argv) {
                 DrawModel(model, model_position, 1.0f, RED);
 
             EndMode3D();
-		EndDrawing();
-	}
-	return 0;
+        EndDrawing();
+    }
+    return 0;
 }
