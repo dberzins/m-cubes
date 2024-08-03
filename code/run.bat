@@ -1,0 +1,2 @@
+dir
+build\mcubes.exe

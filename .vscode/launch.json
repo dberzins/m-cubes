@@ -1,0 +1,19 @@
+{
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Launch",
+                "type": "cppvsdbg",
+                "request": "launch",
+                "program": "${workspaceRoot}/build/mcubes.exe",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceRoot}/build",
+                "environment": [],
+                "console": "integratedTerminal"
+                // "console": "internalConsole"
+                // "console": "externalTerminal"
+                // "externalConsole": false
+            }
+        ]
+    }
